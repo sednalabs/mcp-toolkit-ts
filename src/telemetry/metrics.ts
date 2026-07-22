@@ -1,5 +1,7 @@
 export type MetricLabels = Record<string, string>;
 
+const PROMETHEUS_LABEL_NAME_PATTERN = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
+
 type CounterEntry = {
   labels: MetricLabels;
   value: number;
@@ -16,6 +18,11 @@ type HistogramEntry = {
 function normalizeLabels(labels: MetricLabels = {}): MetricLabels {
   const ordered: MetricLabels = {};
   for (const key of Object.keys(labels).sort()) {
+    if (!PROMETHEUS_LABEL_NAME_PATTERN.test(key)) {
+      throw new TypeError(
+        'Prometheus label names must start with a letter or underscore and contain only letters, digits, and underscores',
+      );
+    }
     ordered[key] = labels[key] ?? '';
   }
   return ordered;
@@ -25,12 +32,16 @@ function labelsKey(labels: MetricLabels = {}): string {
   return JSON.stringify(normalizeLabels(labels));
 }
 
+function escapeLabelValue(value: string): string {
+  return value.replace(/\\/g, '\\\\').replace(/\n/g, '\\n').replace(/"/g, '\\"');
+}
+
 function formatLabels(labels: MetricLabels = {}): string {
   const entries = Object.entries(labels);
   if (entries.length === 0) return '';
   const rendered = entries
     .map(([key, value]) => {
-      const val = String(value).replace(/"/g, '\"');
+      const val = escapeLabelValue(String(value));
       return `${key}="${val}"`;
     })
     .join(',');
