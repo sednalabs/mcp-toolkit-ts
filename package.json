@@ -1,0 +1,67 @@
+{
+  "name": "@sednalabs/mcp-toolkit-ts",
+  "version": "0.1.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "type": "module",
+  "description": "Reusable TypeScript primitives for Model Context Protocol servers and clients.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sednalabs/mcp-toolkit-ts.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sednalabs/mcp-toolkit-ts/issues"
+  },
+  "homepage": "https://github.com/sednalabs/mcp-toolkit-ts#readme",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "typescript"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./server/events/sqlite": {
+      "types": "./dist/server/events/sqlite.d.ts",
+      "import": "./dist/server/events/sqlite.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "prepare": "npm run build",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.25.3",
+    "jose": "^6.1.3",
+    "zod": "^4.3.5"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.9",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.17"
+  },
+  "peerDependencies": {
+    "sqlite3": "^5.1.7"
+  },
+  "peerDependenciesMeta": {
+    "sqlite3": {
+      "optional": true
+    }
+  },
+  "overrides": {
+    "tar": "7.5.6"
+  }
+}
